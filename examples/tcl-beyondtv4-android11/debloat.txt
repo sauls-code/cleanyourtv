@@ -1,0 +1,72 @@
+# TCL BeyondTV4 (reports as "Smart TV Pro", device BeyondTV4, board rtd288o, client type
+# TCL-AU-RTD51M-S1, software V8-R51MT05-LF1V620 AR09), Android 11 (SDK 30), build RP1A.200622.001
+# release-keys. Australia retail unit (preloaded Stan, SBS On Demand).
+#
+# Apply:   TV_HOST=<tv ip> tools/disable.sh examples/tcl-beyondtv4-android11/debloat.txt
+# Undo:    TV_HOST=<tv ip> tools/restore.sh examples/tcl-beyondtv4-android11/debloat.txt com.google.android.apps.tv.launcherx
+# Everything is DISABLED, not uninstalled. Comment out any line you want to keep.
+#
+# Stock launcher: com.google.android.apps.tv.launcherx (Google TV Launcher). Pass to restore.sh as 2nd arg.
+# Live TV app: com.tcl.tv (owns HDMI/tuner playback, leanback action present). Keep com.tcl.tvinput too.
+#
+# Tested on a real unit: Wi-Fi stayed up, D-pad navigation, HDMI inputs dropdown via TvInputManager,
+# and streaming apps (Apple TV, Netflix, Stan, Disney+) all worked after debloating and launcher installation.
+#
+# Quirks on this firmware:
+# - Setup wizard (com.google.android.tungsten.setupwraith) claims HOME with priority 1 once launcherx
+#   is disabled. On this firmware, Wi-Fi networks belong to android.uid.system:1000 (verified with
+#   dumpsys wifi), so setupwraith can safely be disabled without dropping Wi-Fi.
+# - screencap writes an empty file while Live TV/HDMI or secure surface is on screen. Press Home first.
+#
+# DO NOT DISABLE (load-bearing on TCL Android 11):
+# com.tcl.tv com.tcl.tvinput            # Live TV and HDMI tuner framework
+# com.tcl.tcl_bt_rcu_service             # Bluetooth remote service
+# com.tcl.autopair                       # Bluetooth remote pairing
+# com.google.android.tv.remote.service   # Android TV remote service
+# com.tcl.settings com.android.tv.settings
+# com.tcl.initsetup com.tcl.factory.view
+# com.tcl.system.server com.tcl.providers.config
+# com.tcl.xian.StartandroidService
+# com.tcl.inputmethod.international      # on-screen keyboard
+# com.google.android.inputmethod.latin
+
+# 1. Telemetry, analytics, and crash reporting
+com.tcl.bi                               # TCL BI analytics and telemetry
+com.tcl.logkit                           # TCL log collection service
+com.google.android.feedback              # "send feedback" uploader
+com.google.android.onetimeinitializer    # setup leftovers
+com.google.android.partnersetup          # partner-app attribution
+android.autoinstalls.config.google.gtvpai # auto-installs config
+
+# 2. Manufacturer content, promos, and recommendation rows
+com.tcl.partnercustomizer                # TCL promo rows and channels
+com.tcl.waterfall.overseas               # TCL web content feed
+com.tcl.tv.tclhome_passive               # pushes TCL home content at boot
+com.tcl.esticker                         # retail demo stickers
+com.tcl.channelplus                      # TCL Channel Plus streaming promo service
+com.tcl.overseasappshow                  # TCL app promos
+com.google.android.apps.nbu.smartconnect.tv # Smart Connect promo service
+
+# 3. Google extras and recommendation feeders
+com.google.android.videos                # Google Play Movies & TV
+com.google.android.play.games            # Google Play Games
+com.google.android.youtube.tvmusic       # YouTube Music
+
+# 4. Background cleaners, overlays, duplicate webview, and unused tools
+com.tcl.guard                            # TCL cleaner / memory manager
+com.tcl.suspension                       # floating suspension ball overlay
+com.tcl.gamebar                          # game bar overlay
+com.tcl.ocean.instructions               # electronic user manual
+com.tcl.keyhelp                          # remote-key help overlays
+com.tcl.ui_mediaCenter                   # USB media center
+com.tcl.browser                          # TCL browser (Google WebView kept)
+com.tcl.messagebox                       # message/promo box
+com.tcl.useragreement                    # user agreement screens
+com.tcl.t_solo                           # TCL karaoke app
+com.tcl.hearaid                          # hearing aid feature
+com.tcl.dashboard                        # TCL side dashboard
+com.tcl.versionUpdateApp                 # re-enable for TCL firmware updates
+com.tcl.android.webview                  # unused duplicate webview
+
+# 5. Setup wizard claimant (must be disabled for third-party launcher)
+com.google.android.tungsten.setupwraith  # Google TV setup wizard RecoveryActivity
